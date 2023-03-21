@@ -39,3 +39,34 @@ class FacePainter extends CustomPainter {
   @override
   bool shouldRepaint(FacePainter oldDelegate) => true;
 }
+
+
+/*
+CustomPaint(
+  painter: FacePainter(faces),
+  child: Image.file(_imageFile!),
+)
+
+class FacePainter extends CustomPainter {
+  final List<Face> faces;
+
+  FacePainter(this.faces);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.red
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0;
+
+    for (final face in faces) {
+      canvas.drawRect(face.boundingBox, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(FacePainter oldDelegate) {
+    return faces != oldDelegate.faces;
+  }
+}
+*/

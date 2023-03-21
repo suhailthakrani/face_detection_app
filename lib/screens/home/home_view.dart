@@ -29,7 +29,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   initiliazeCamera() {
-    cameraController = CameraController(cameras[0], ResolutionPreset.medium);
+    cameraController = CameraController(cameras.first, ResolutionPreset.medium);
     cameraController.initialize().then((_) {
       if (!mounted) {
         return;
@@ -44,7 +44,7 @@ class _HomeViewState extends State<HomeView> {
     });
     faceDetector = GoogleMlKit.vision.faceDetector(FaceDetectorOptions(
       enableContours: false,
-      enableClassification: false,
+      enableClassification: true,
       enableTracking: true,
     ));
   }
@@ -83,14 +83,42 @@ class _HomeViewState extends State<HomeView> {
       return Container();
     }
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Center(child: CameraPreview(cameraController)),
-          CustomPaint(
-            painter: FacePainter(faces, cameraController),
-          ),
-        ],
+      appBar: AppBar(
+        title: Text('Face Detection App'),
       ),
+      body: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            // Positioned.fill(
+            //   child: AspectRatio(
+            //     aspectRatio: cameraController.value.aspectRatio,
+            //     child: CameraPreview(cameraController),
+            //   ),
+            // ),
+            Container(
+                height: MediaQuery.of(context).size.height,
+                child: CameraPreview(cameraController)),
+            CustomPaint(
+              painter: FacePainter(faces, cameraController),
+            )
+          ],
+        ),
+      ),
+      // floatingActionButton: Row(
+      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //   children: [
+      //     FloatingActionButton(
+      //       onPressed: _takePicture,
+      //       tooltip: 'Take Picture',
+      //       child: Icon(Icons.camera_alt),
+      //     ),
+      //     FloatingActionButton(
+      //       onPressed: _getImage,
+      //       tooltip: 'Select Image',
+      //       child: Icon(Icons.image),
+      //     ),
+      //   ],
+      // ),
     );
   }
 
@@ -120,10 +148,10 @@ class _HomeViewState extends State<HomeView> {
 
   Future<void> _getImage() async {
     final pickedFile =
-        await ImagePicker().getImage(source: ImageSource.gallery);
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        // _image = File(pickedFile.path);
+        _image = File(pickedFile.path);
       });
       // _runModelOnImage();
     }
