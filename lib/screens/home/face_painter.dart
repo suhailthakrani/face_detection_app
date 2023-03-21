@@ -25,12 +25,19 @@ class FacePainter extends CustomPainter {
       final face = faces[i];
 
       canvas.drawRect(
-        Rect.fromLTRB(
-          face.boundingBox.left,
-          face.boundingBox.top,
-          face.boundingBox.right,
-          face.boundingBox.bottom,
-        ),
+        faces.length > 1
+            ? Rect.fromLTRB(
+                face.boundingBox.left - 50,
+                face.boundingBox.top - 50,
+                face.boundingBox.right - 20,
+                face.boundingBox.bottom - 20,
+              )
+            : Rect.fromLTRB(
+                face.boundingBox.left - 20,
+                face.boundingBox.top - 20,
+                face.boundingBox.right - 20,
+                face.boundingBox.bottom,
+              ),
         paint,
       );
     }

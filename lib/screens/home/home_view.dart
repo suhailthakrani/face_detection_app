@@ -19,6 +19,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   late CameraController cameraController;
   bool isWorking = false;
+  bool isFront = false;
   late FaceDetector faceDetector;
   List<Face> faces = [];
   File? _image;
@@ -29,7 +30,11 @@ class _HomeViewState extends State<HomeView> {
   }
 
   initiliazeCamera() {
+    CameraDescription camera = cameras.first;
     cameraController = CameraController(cameras.first, ResolutionPreset.medium);
+    final frontCamera = cameras.firstWhere(
+      (camera) => camera.lensDirection == CameraLensDirection.front,
+    );
     cameraController.initialize().then((_) {
       if (!mounted) {
         return;
@@ -84,20 +89,12 @@ class _HomeViewState extends State<HomeView> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text('Face Detection App'),
+        title: const Text('Face Detection App'),
       ),
       body: SafeArea(
         child: Stack(
           children: <Widget>[
-            // Positioned.fill(
-            //   child: AspectRatio(
-            //     aspectRatio: cameraController.value.aspectRatio,
-            //     child: CameraPreview(cameraController),
-            //   ),
-            // ),
-            Container(
-                height: MediaQuery.of(context).size.height,
-                child: CameraPreview(cameraController)),
+            CameraPreview(cameraController),
             CustomPaint(
               painter: FacePainter(faces, cameraController),
             )
